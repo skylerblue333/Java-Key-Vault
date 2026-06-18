@@ -1,0 +1,1 @@
+# Java-Key-Vault\n\n## Overview\nEnterprise-grade key vault implementation in Java.\n\n## Quick Start (1-Click Build)\n\n```bash\ngit clone https://github.com/skylerblue333/Java-Key-Vault.git\ncd Java-Key-Vault\n# Build instructions depend on the language\n```\n
