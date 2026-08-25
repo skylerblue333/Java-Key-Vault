@@ -1,44 +1,43 @@
-<!-- PORTFOLIO PROJECT PROFILE: maintained by the repository owner -->
+# Sky Key Vault (Java)
 
-## Project profile and code-audit snapshot
+**Status: engineering beta.** This repository implements a focused Java 21 in-memory secret vault primitive. It encrypts stored values with AES-256-GCM under a process-supplied wrapping key, authenticates each envelope with the key ID as AAD, validates identifiers and secret sizes, and supports retrieval/deletion plus opaque envelope export for inspection.
 
-**What this is:** **Java-Key-Vault** is a public repository described as: “Enterprise-grade key vault implementation in Java. #SkyCoin4444 #AI #Blockchain #DevOps #Innovation” Its dominant language signals are **Python (4 files)**.
+## What is verified by the repository
 
-**Why it has value:** Its value is best understood through the implementation evidence currently present in the repository: **18 tracked files** were observed in the shallow audit, with the source structure and existing documentation providing the project’s specific context. This README does not treat a prototype, experiment, or archive as a production system without supporting evidence.
+- Java 21 Maven build and JUnit tests
+- AES/GCM authenticated encryption with a fresh 96-bit IV per write
+- 32-byte wrapping-key validation
+- bounded key IDs (`[A-Za-z0-9_.-]{1,64}`)
+- bounded secret payloads (1–4096 bytes)
+- non-root container packaging
+- dependency/security scanning in GitHub Actions
+- startup configuration validation through `SKY_VAULT_MASTER_KEY_B64`
 
-**Implementation evidence:** 2 test-related file(s) detected; 2 dependency or package manifest(s) detected; 2 build/CI/infrastructure signal(s) detected; and 3 documentation or governance file(s) detected. Test filenames observed include `tests/__init__.py`, `tests/test_main.py`. Dependency or package files include `package.json`, `requirements.txt`. Build, CI, or infrastructure signals include `Dockerfile`, `.github/workflows/ci.yml`.
+## What this is not
 
-**Current status:** The repository is tracked on the `main` branch. The existing source tree, configuration, tests, workflows, and documentation remain authoritative for supported behavior and maturity. A code audit is not a production-readiness certification, and the presence of a test or workflow file does not establish that all checks pass.
+This is **not** HashiCorp Vault, AWS KMS, HSM-backed key management, a distributed secret store, or a production deployment. Secrets are held only in process memory; there is no durable encrypted datastore, replication, RBAC, audit-log durability, lease/rotation engine, PKI, TLS termination, HA, hardware-rooted protection, or independently verified security assessment.
 
-**Relationship to the wider portfolio:** This repository is one focused component of the broader Skyler Blue Spillers portfolio across AI, software engineering, cloud and DevOps, cybersecurity, blockchain, finance, education, social systems, and creative work. It may provide a service boundary, implementation pattern, experiment, archive, or reusable idea for related repositories. Treat repositories as technical dependencies only where documented interfaces and verified project requirements support that relationship.
+## Build and test
 
-**Quality and security note:** No obvious secret-like pattern was detected by the limited static scan; this is not a substitute for a security audit. No TODO/FIXME marker was detected in the scanned text files.
+```bash
+mvn clean verify
+```
 
----
+## Container smoke run
 
-# Java Key Vault
+```bash
+docker build -t sky-key-vault .
+docker run --rm \
+  -e SKY_VAULT_MASTER_KEY_B64=AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8= \
+  sky-key-vault
+```
 
-![GitHub stars](https://img.shields.io/github/stars/skylerblue333/Java-Key-Vault?style=flat-square)
-![GitHub license](https://img.shields.io/github/license/skylerblue333/Java-Key-Vault?style=flat-square)
+The example key is test material only. Never reuse it for real secrets.
 
-## 🌟 Overview
-**Java-Key-Vault** is a professional-grade project within the **SkyCoin4444** ecosystem. It focuses on delivering high-value solutions in the domain of **Python**.
+## SKYCOIN4444 integration boundary
 
-## 🚀 Key Features
-- **Scalable Architecture**: Designed for enterprise-level growth and performance.
-- **Modern Standards**: Implements best practices for clean code and maintainability.
-- **Robust Integration**: Built to work seamlessly within modern cloud-native environments.
+A future ecosystem adapter can place this primitive behind an authenticated service boundary for development/testing. Production integration should instead use an externally managed KMS/HSM-backed root key and add durable encrypted storage, authorization, audit logging, rotation, backup/restore, and operational monitoring before any production-readiness claim.
 
-## 🛠️ Technology Stack
-- **Primary Domain**: Python
-- **Ecosystem**: SkyCoin4444 Digital Platform
+## License
 
-## 📂 Structure
-The project is organized into a modular structure to ensure clarity and ease of development.
-
-## 👨‍💻 Author
-**Skyler Blue Spillers**
-*Professional Chess Player & Software Engineer*
-
----
-*Powered by SkyCoin4444*
+See `LICENSE`.
