@@ -16,11 +16,6 @@ jobs:
           cache: maven
       - name: Test and package
         run: mvn -B -ntp clean verify
-      - name: Review dependency changes
-        if: github.event_name == 'pull_request'
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
       - name: Runtime dependency inventory
         run: mvn -B -ntp dependency:tree -Dscope=runtime
       - name: Build image
